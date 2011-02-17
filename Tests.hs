@@ -118,21 +118,17 @@ testCases =
 runTests = mapM_ checkTestCase testCases
 
 runTests' = do
-   qt <- gen 50 (arbitrary :: Gen TestCase)
-   mapM_ checkTestCase qt
-   where 
-    gen :: Int -> Gen a -> IO [a]
-    gen num (MkGen m) =
-        do rnd <- newStdGen
-           let rnds rnd = rnd1 : rnds rnd2 where (rnd1,rnd2) = split rnd
-           return [(m r n) | (r,n) <- rnds rnd `zip` [0..num] ]
+   qt <- sample' $ vectorOf 50 (arbitrary :: Gen TestCase)
+   let tests = map mkName (zip (head qt) [1..])
+   mapM_ checkTestCase tests
+   where mkName (tc@(TestCase n _ _ _), i) = 
+                tc {testName = n ++ "_" ++ show i}
 
 runTestsQC = quickCheck prop_testCase
 
 instance Arbitrary TestCase where
    arbitrary = do
-      num <- choose (1,50) :: Gen Int
-      let testName = "test" ++ show num
+      let testName = "testQC"
       fs <- listOf (choose (0,1) :: Gen Int)
       let genActions tick = 
            map (\x->if x == 1 then ask () else lift (tick >> return 0)) fs
