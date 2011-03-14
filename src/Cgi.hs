@@ -2,7 +2,7 @@
 -- The idea is that the CGI programmer can send HTML forms to the user
 -- by using ask. When the user enters data in the form and sends it
 -- back, the CGI program is re-run up to the point where ask was used,
--- and continues with the answer from the user
+-- and continues with the answer from the user.
 module Cgi (
     module Log.Replay,
     Cgi (..),
