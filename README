@@ -1,0 +1,5 @@
+Lab 2 assignment.
+
+The implementation and tests of a Monad for programs that can be replayed.
+Includes a very simple library for writing CGI programs, trace space optimization.
+
